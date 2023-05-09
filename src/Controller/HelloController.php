@@ -1,35 +1,68 @@
 <?php
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Taxes\Calculator;
+use Twig\Environment;
 
 class HelloController extends AbstractController
 {
-    protected $logger;
-    protected $calculator;
-
-    public function __construct(LoggerInterface $logger, Calculator $calculator)
-    {
-        $this->logger = $logger;
-        $this->calculator = $calculator;
+    protected $twig;
+    public function __construct(Environment $twig){
+        $this->twig = $twig;
     }
 
     /**
      * @Route("/hello/{prenom}", name="hello", host="127.0.0.1", methods={"GET", "POST"}, schemes={"https", "http"})
      */
-    public function hello(Request $request, string $prenom="World"): Response
+    public function hello(string $prenom="World"): Response
     {
-        $this->logger->error("mon message de log");
+        return new Response($this->render('hello.html.twig',['prenom' => $prenom]));
+        /*$html = $this->twig->render('hello.html.twig', [
+            'prenom' => $prenom, 
+            'age' => 33, 
+            'prenoms' => [
+                'Lior', 
+                'Magali', 
+                'Elise'
+            ],
+            'ages' => [
+                '12', 
+                '18' ,
+                '15', 
+                '29'
+            ],
+            'formateur' => [
+                'prenom' => 'Elon', 
+                'nom' => 'Musk', 
+                'age' => '33'
+                ],
+            'formateur1' => [
+                'prenom' => 'Lior', 
+                'nom' => 'Chamla'
+                ],
+            'formateur2' => [
+                'prenom' => 'Jérome', 
+                'nom' => 'Dupont'
+                ]
+        ]);
+        return new Response($html);*/
+    }
 
-        $tva = $this->calculator->calcul(100);
+    /**
+     * @Route("/example", name="example")
+     */
+    public function example(): Response
+    {
+        return new Response($this->renders('example.html.twig', ['age' => 33]));
+    }
 
-        var_dump($tva);
-        return new Response("Je m'appelle $prenom !");
+    protected function renders(string $path, array $variables)
+    {
+        $html = $this->twig->render($path, $variables);
+
+        return new Response($html); 
     }
 }
 ?>
