@@ -18,7 +18,7 @@ class HelloController extends AbstractController
      */
     public function hello(string $prenom="World"): Response
     {
-        return new Response($this->render('hello.html.twig',['prenom' => $prenom]));
+        return new Response($this->renders('hello.html.twig',['prenom' => $prenom]));
         /*$html = $this->twig->render('hello.html.twig', [
             'prenom' => $prenom, 
             'age' => 33, 
