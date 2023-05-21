@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+<<<<<<< HEAD
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
@@ -13,6 +14,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+=======
+use App\Entity\Product;
+use App\Form\ProductType;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+>>>>>>> 6b9c5b6 (i ve created a form to create products)
 
 class ProductController extends AbstractController
 {
@@ -33,12 +48,19 @@ class ProductController extends AbstractController
     }
 
     /**
+<<<<<<< HEAD
      * @Route("/{category_slug}/{slug}", name="product_show")
+=======
+     * @Route("/category/{category_slug}/{slug}", name="product_show")
+>>>>>>> 6b9c5b6 (i ve created a form to create products)
      */
     public function show(string $slug, ProductRepository $productRepository): Response
     {
         $product = $productRepository->findOneBy(['slug' => $slug]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6b9c5b6 (i ve created a form to create products)
         if (!$product) {
             throw $this->createNotFoundException("Le produit demandé n'existe pas");
         }
@@ -48,6 +70,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/create", name="product_create")
      */
+<<<<<<< HEAD
     public function create(FormFactoryInterface $factory): Response
     {
         $builder = $factory->createBuilder();
@@ -73,6 +96,21 @@ class ProductController extends AbstractController
                 ]);
 
         $form = $builder->getForm();
+=======
+    public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ProductType::class);
+
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted())
+        {
+            $product = $form->getData();
+            $product->setSlug(strtolower($slugger->slug($product->getName())));
+            $em->persist($product);
+            $em->flush();
+        }
+>>>>>>> 6b9c5b6 (i ve created a form to create products)
         $formView = $form->createView();
 
         return $this->render('product/create.html.twig', [
