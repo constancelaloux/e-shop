@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ProductType extends AbstractType
 {
@@ -29,7 +31,7 @@ class ProductType extends AbstractType
             'attr' => [
                 'placeholder' => 'Prix du produit en €']])
         ->add('mainPicture', UrlType::class, [
-            'label' => 'Catégorie',
+            'label' => 'Ajouter une image',
             'attr' => ['placeholder' => 'Tapez une URL d\'image']
         ])
         ->add('category', EntityType::class, [
