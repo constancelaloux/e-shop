@@ -6,7 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
+//use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -38,7 +38,7 @@ class Product
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\NotBlank(message: "la description courte est obligatoire!")]
-    #[Assert\Length(min: 20, max: 50 , minMessage: "la description courte doit quand meme faire au moins 20 caractéres!")]
+    #[Assert\Length(min: 20, max: 100 , minMessage: "la description courte doit quand meme faire au moins 20 caractéres!")]
     private ?string $shortDescription = '';
 
     /*public static function loadValidatorMetadata(ClassMetadata $metadata)

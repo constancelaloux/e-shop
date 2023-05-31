@@ -14,6 +14,23 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryController extends AbstractController
 {
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    public function renderMenuList()
+    {
+        //1: Aller chercher les catégories dans la bdd
+        $categories = $this->categoryRepository->findAll();
+        //2: Renvoyer le rendu html sous la forme d'une response ($this->render)
+        if (!$categories) {
+            throw $this->createNotFoundException("La catégorie demandée n'existe pas");
+        }
+        return ($this->render('category/_menu.html.twig', ['categories' => $categories]));
+    }
+
     /**
      * @Route("/admin/category/create", name="category_create")
      */
@@ -59,8 +76,6 @@ class CategoryController extends AbstractController
             //J'ajoute les données à l'entité Category
             $category->setSlug(strtolower($slugger->slug($category->getName())));
             //Je persiste les données et je les envois dans la base de données
-            //$em->persist($category);
-            //dd($category);
             $em->flush();
             //Je renvoi vers la route homepage
             return $this->redirectToRoute('homepage');

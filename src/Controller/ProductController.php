@@ -12,9 +12,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -50,7 +48,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/product/{id}/edit", name="product_find")
      */
-    public function edit(int $id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function edit(int $id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
     {
         $product = $productRepository->find($id);
 
