@@ -32,13 +32,14 @@ class Product
     private ?Category $category = null;
 
     #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank(message: "la photo principale est obligatoire!")]
     #[Assert\Url(message: "la photo principale doit étre une url valide!")]
-    private string $mainPicture = '';
+    private ?string $mainPicture = '';
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\NotBlank(message: "la description courte est obligatoire!")]
     #[Assert\Length(min: 20, max: 50 , minMessage: "la description courte doit quand meme faire au moins 20 caractéres!")]
-    private string $shortDescription = '';
+    private ?string $shortDescription = '';
 
     /*public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
@@ -108,7 +109,7 @@ class Product
         return $this->mainPicture;
     }
 
-    public function setMainPicture(string $mainPicture): self
+    public function setMainPicture(?string $mainPicture): self
     {
         $this->mainPicture = $mainPicture;
 
@@ -120,7 +121,7 @@ class Product
         return $this->shortDescription;
     }
 
-    public function setShortDescription(string $shortDescription): self
+    public function setShortDescription(?string $shortDescription): self
     {
         $this->shortDescription = $shortDescription;
 

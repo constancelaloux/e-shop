@@ -60,7 +60,6 @@ class ProductController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            dd($form->getData());
             
             $em->flush();
 
