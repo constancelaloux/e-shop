@@ -20,6 +20,7 @@ class CategoryController extends AbstractController
     {
         $this->categoryRepository = $categoryRepository;
     }
+    
     public function renderMenuList()
     {
         //1: Aller chercher les catégories dans la bdd
