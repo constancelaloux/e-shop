@@ -63,6 +63,9 @@ class CategoryController extends AbstractController
      */
     public function edit(int $id, CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+        // or add an optional message - seen by developers
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+        
         //Je vais chercher les données en base en fonction de l'id que l'on a fourni
         $category = $categoryRepository->find($id);
 
