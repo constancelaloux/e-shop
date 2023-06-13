@@ -7,8 +7,11 @@ use App\Entity\Category;
 use App\Form\CategoryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -64,10 +67,27 @@ class CategoryController extends AbstractController
     public function edit(int $id, CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         // or add an optional message - seen by developers
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
-        
+        //$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
+
         //Je vais chercher les données en base en fonction de l'id que l'on a fourni
         $category = $categoryRepository->find($id);
+
+        if(!$category)
+        {
+            throw new NotFoundHttpException("Cette catégorie n'existe pas");
+        }
+
+        $user = $this->getUser(); //$security->getUser
+
+        if(!$user)
+        {
+            return $this->redirectToRoute("app_login");
+        }
+
+        if($user !== $category->getOwner())
+        {
+            throw new AccessDeniedHttpException("Vous n'étes pas le propriétaire de cette catégorie");
+        }
 
         $form = $this->createForm(CategoryType::class, $category);
 
