@@ -9,9 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    /**
-     * @Route("/", name="homepage")
-     */
+
+    #[Route('/', name: 'homepage')]
     public function homepage(ProductRepository $productRepository): Response
     {
         $products = $productRepository->findBy([], [], 3);

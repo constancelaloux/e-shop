@@ -35,9 +35,7 @@ class CategoryController extends AbstractController
         return ($this->render('category/_menu.html.twig', ['categories' => $categories]));
     }
 
-    /**
-     * @Route("/admin/category/create", name="category_create")
-     */
+    #[Route('/admin/category/create', name: 'category_create')]
     public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         $category = new Category();
@@ -61,9 +59,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/category/{id}/edit", name="category_edit")
-     */
+    #[Route('/admin/category/{id}/edit', name: 'category_edit')]
     public function edit(int $id, CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         // or add an optional message - seen by developers
@@ -77,9 +73,13 @@ class CategoryController extends AbstractController
             throw new NotFoundHttpException("Cette catégorie n'existe pas");
         }
 
-        $user = $this->getUser(); //$security->getUser
+        //$security->isGranted('CAN_EDIT', $category);
 
-        if(!$user)
+        //$this->denyAccessUnlessGranted('CAN_EDIT', $category, "Vous n'étes pas le propriétaire de cette catégorie");
+
+        //$user = $this->getUser(); //$security->getUser
+
+        /*if(!$user)
         {
             return $this->redirectToRoute("app_login");
         }
@@ -87,7 +87,7 @@ class CategoryController extends AbstractController
         if($user !== $category->getOwner())
         {
             throw new AccessDeniedHttpException("Vous n'étes pas le propriétaire de cette catégorie");
-        }
+        }*/
 
         $form = $this->createForm(CategoryType::class, $category);
 

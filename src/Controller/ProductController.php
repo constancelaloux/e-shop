@@ -16,9 +16,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProductController extends AbstractController
 {
-    /**
-     * @Route("/{slug}", name="product_category", priority=-1)
-     */
+    #[Route('/category/{slug}', name: 'product_category', priority: -1)]
     public function category(string $slug, CategoryRepository $categoryRepository): Response
     {
         $category = $categoryRepository->findOneBy(['slug' => $slug]);
@@ -31,10 +29,8 @@ class ProductController extends AbstractController
             'category' => $category,
         ]);
     }
-    
-    /**
-     * @Route("/category/{category_slug}/{slug}", name="product_show")
-     */
+
+    #[Route('/category/{category_slug}/{slug}', name: 'product_show')]
     public function show(string $slug, ProductRepository $productRepository): Response
     {
         $product = $productRepository->findOneBy(['slug' => $slug]);
@@ -45,9 +41,7 @@ class ProductController extends AbstractController
         return ($this->render('product/show.html.twig', ['product' => $product]));
     }
 
-    /**
-     * @Route("/admin/product/{id}/edit", name="product_find")
-     */
+    #[Route('/admin/product/{id}/edit', name: 'product_find')]
     public function edit(int $id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
     {
         $product = $productRepository->find($id);
@@ -75,9 +69,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/product/create", name="product_create")
-     */
+    #[Route('/admin/product/create', name: 'product_create')]
     public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, EntityManagerInterface $em): Response
     {
         $product = new Product;
