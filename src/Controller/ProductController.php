@@ -72,25 +72,34 @@ class ProductController extends AbstractController
     #[Route('/admin/product/create', name: 'product_create')]
     public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, EntityManagerInterface $em): Response
     {
+        //On instancie la class Product
         $product = new Product;
 
+        //On créé le formulaire qui permet de créé les produits
         $form = $this->createForm(ProductType::class, $product);
 
+        //On récupére les données de la requéte
         $form->handleRequest($request);
         
+        //Si le formulaire est valide et bien soumis
         if($form->isSubmitted() && $form->isValid())
         {
+            //On va chercher le slug du produit ainsi que son nom
             $product->setSlug(strtolower($slugger->slug($product->getName())));
+            //On enregistre les données en bdd
             $em->persist($product);
             $em->flush();
+            //Et on redirige vers la route product_show qui permet d'afficher les produits
             return $this->redirectToRoute('product_show', [
                 'category_slug' => $product->getCategory()->getSlug(),
                 'slug' => $product->getSlug()
             ]);
         }
         
+        //On génére le formulaire
         $formView = $form->createView();
 
+        //On fait passer le formulaire à la vue
         return $this->render('product/create.html.twig', [
             'formView' => $formView 
         ]);
